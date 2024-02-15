@@ -1,0 +1,198 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    DUAL
+    END
+    INT
+    LBRACKET
+    MINUS
+    MULTIPLY
+    PLUS
+    RBRACKET
+    READ
+    RESERVED
+    SEMICOLON
+    SIMBOLS
+
+Grammar
+
+Rule 0     S' -> assignment
+Rule 1     assignment -> ID EQUALS NUMBER
+Rule 2     assignment -> ID EQUALS expression
+Rule 3     expression -> expression OPERATORS expression
+Rule 4     expression -> LPAREN expression RPAREN
+Rule 5     expression -> NUMBER
+Rule 6     expression -> ID
+
+Terminals, with rules where they appear
+
+DUAL                 : 
+END                  : 
+EQUALS               : 1 2
+ID                   : 1 2 6
+INT                  : 
+LBRACKET             : 
+LPAREN               : 4
+MINUS                : 
+MULTIPLY             : 
+NUMBER               : 1 5
+OPERATORS            : 3
+PLUS                 : 
+RBRACKET             : 
+READ                 : 
+RESERVED             : 
+RPAREN               : 4
+SEMICOLON            : 
+SIMBOLS              : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+assignment           : 0
+expression           : 2 3 3 4
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . assignment
+    (1) assignment -> . ID EQUALS NUMBER
+    (2) assignment -> . ID EQUALS expression
+
+    ID              shift and go to state 2
+
+    assignment                     shift and go to state 1
+
+state 1
+
+    (0) S' -> assignment .
+
+
+
+state 2
+
+    (1) assignment -> ID . EQUALS NUMBER
+    (2) assignment -> ID . EQUALS expression
+
+    EQUALS          shift and go to state 3
+
+
+state 3
+
+    (1) assignment -> ID EQUALS . NUMBER
+    (2) assignment -> ID EQUALS . expression
+    (3) expression -> . expression OPERATORS expression
+    (4) expression -> . LPAREN expression RPAREN
+    (5) expression -> . NUMBER
+    (6) expression -> . ID
+
+    NUMBER          shift and go to state 5
+    LPAREN          shift and go to state 7
+    ID              shift and go to state 4
+
+    expression                     shift and go to state 6
+
+state 4
+
+    (6) expression -> ID .
+
+    OPERATORS       reduce using rule 6 (expression -> ID .)
+    $end            reduce using rule 6 (expression -> ID .)
+    RPAREN          reduce using rule 6 (expression -> ID .)
+
+
+state 5
+
+    (1) assignment -> ID EQUALS NUMBER .
+    (5) expression -> NUMBER .
+
+  ! reduce/reduce conflict for $end resolved using rule 1 (assignment -> ID EQUALS NUMBER .)
+    $end            reduce using rule 1 (assignment -> ID EQUALS NUMBER .)
+    OPERATORS       reduce using rule 5 (expression -> NUMBER .)
+
+  ! $end            [ reduce using rule 5 (expression -> NUMBER .) ]
+
+
+state 6
+
+    (2) assignment -> ID EQUALS expression .
+    (3) expression -> expression . OPERATORS expression
+
+    $end            reduce using rule 2 (assignment -> ID EQUALS expression .)
+    OPERATORS       shift and go to state 8
+
+
+state 7
+
+    (4) expression -> LPAREN . expression RPAREN
+    (3) expression -> . expression OPERATORS expression
+    (4) expression -> . LPAREN expression RPAREN
+    (5) expression -> . NUMBER
+    (6) expression -> . ID
+
+    LPAREN          shift and go to state 7
+    NUMBER          shift and go to state 10
+    ID              shift and go to state 4
+
+    expression                     shift and go to state 9
+
+state 8
+
+    (3) expression -> expression OPERATORS . expression
+    (3) expression -> . expression OPERATORS expression
+    (4) expression -> . LPAREN expression RPAREN
+    (5) expression -> . NUMBER
+    (6) expression -> . ID
+
+    LPAREN          shift and go to state 7
+    NUMBER          shift and go to state 10
+    ID              shift and go to state 4
+
+    expression                     shift and go to state 11
+
+state 9
+
+    (4) expression -> LPAREN expression . RPAREN
+    (3) expression -> expression . OPERATORS expression
+
+    RPAREN          shift and go to state 12
+    OPERATORS       shift and go to state 8
+
+
+state 10
+
+    (5) expression -> NUMBER .
+
+    RPAREN          reduce using rule 5 (expression -> NUMBER .)
+    OPERATORS       reduce using rule 5 (expression -> NUMBER .)
+    $end            reduce using rule 5 (expression -> NUMBER .)
+
+
+state 11
+
+    (3) expression -> expression OPERATORS expression .
+    (3) expression -> expression . OPERATORS expression
+
+  ! shift/reduce conflict for OPERATORS resolved as shift
+    $end            reduce using rule 3 (expression -> expression OPERATORS expression .)
+    RPAREN          reduce using rule 3 (expression -> expression OPERATORS expression .)
+    OPERATORS       shift and go to state 8
+
+  ! OPERATORS       [ reduce using rule 3 (expression -> expression OPERATORS expression .) ]
+
+
+state 12
+
+    (4) expression -> LPAREN expression RPAREN .
+
+    OPERATORS       reduce using rule 4 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 4 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 4 (expression -> LPAREN expression RPAREN .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for OPERATORS in state 11 resolved as shift
+WARNING: reduce/reduce conflict in state 5 resolved using rule (assignment -> ID EQUALS NUMBER)
+WARNING: rejected rule (expression -> NUMBER) in state 5
